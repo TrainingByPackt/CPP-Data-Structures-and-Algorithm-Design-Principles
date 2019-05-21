@@ -4,7 +4,11 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/TrainingByPackt/CPP-Data-Structures-and-Algorithms/pulls)
 
 # CPP-Data-Structures-and-Algorithms
-Become an expert C++ programmer learning how to build applications with C++ data structures and algorithms
+C++ is a mature multi-paradigm programming language that enables you to write high-level code with great control over the hardware. Significant pieces of our software infrastructure today, including databases, browsers, frameworks, and GUI toolkits tend to be written in C++.
+
+The course is structured in three parts: the first part covers data structures in detail, the second part explains basic algorithm design techniques, and the third part covers advanced techniques. You'll begin with an introduction to C++ data structures and see how to store data using linked lists, arrays, stacks, and queues. The second part of the course explains the greedy algorithms and the divide and conquer algorithms that facilitate faster computations in your programs. The third part of the course shows how by using graph algorithms and dynamic programming, you can develop applications that can perform high calculations.  
+
+With this course, you’ll learn how to implement standard data structures and algorithms in idiomatic C++ 14/17 code that is efficient and also scales well.
 
 ## What you will learn
 * Build applications using hashtables, dictionaries, and sets

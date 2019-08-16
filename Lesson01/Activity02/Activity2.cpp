@@ -1,212 +1,172 @@
 #include <iostream>
+#include <vector>
+#include <array>
+#include <sstream>
+#include <algorithm>
+#include <random>
+#include <chrono>
 
-template <typename T>
-struct cir_list_node
+struct card
 {
-    T *data;
-    cir_list_node *next, *prev;
-
-    ~cir_list_node()
+    int number;
+    enum suit
     {
-        delete data;
+        HEART,
+        SPADE,
+        CLUB,
+        DIAMOND
+    } suit;
+
+    std::string to_string() const
+    {
+        std::ostringstream os;
+        if (number > 0 && number <= 10)
+            os << number;
+        else
+        {
+            switch (number)
+            {
+			case 1:
+				os << "Ace";
+				break;
+            case 11:
+                os << "Jack";
+                break;
+            case 12:
+                os << "Queen";
+                break;
+            case 13:
+                os << "King";
+                break;
+            default:
+                return "Invalid card";
+            }
+        }
+        os << " of ";
+        switch (suit)
+        {
+        case HEART:
+            os << "hearts";
+            break;
+        case SPADE:
+            os << "spades";
+            break;
+        case CLUB:
+            os << "clubs";
+            break;
+        case DIAMOND:
+            os << "diamonds";
+            break;
+        }
+        return os.str();
     }
 };
 
-template <typename T>
-struct cir_list
+struct game
 {
-public:
-    using node = cir_list_node<T>;
-    using node_ptr = node *;
-
-private:
-    node_ptr head;
-    size_t n;
-
-public:
-    cir_list() : n(0)
+    std::array<card, 52> deck;
+    std::vector<card> player1, player2, player3, player4;
+    void buildDeck()
     {
-        head = new node{NULL, NULL, NULL}; // Dummy node – having NULL data
-        head->next = head;
-        head->prev = head;
+        for (int i = 0; i < 13; i++)
+            deck[i] = card{i + 1, card::HEART};
+        for (int i = 0; i < 13; i++)
+            deck[i + 13] = card{i + 1, card::SPADE};
+        for (int i = 0; i < 13; i++)
+            deck[i + 26] = card{i + 1, card::CLUB};
+        for (int i = 0; i < 13; i++)
+            deck[i + 39] = card{i + 1, card::DIAMOND};
     }
 
-    size_t size() const
+    void dealCards()
     {
-        return n;
+        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+        std::shuffle(deck.begin(), deck.end(), std::default_random_engine(seed));
+        player1 = {deck.begin(), deck.begin() + 13};
+        player2 = {deck.begin() + 13, deck.begin() + 26};
+        player3 = {deck.begin() + 26, deck.begin() + 39};
+        player4 = {deck.begin() + 39, deck.end()};
     }
 
-    void insert(const T &value)
+    bool compareAndRemove(std::vector<card> &p1, std::vector<card> &p2)
     {
-        node_ptr newNode = new node{new T(value), NULL, NULL};
-        n++;
-        auto dummy = head->prev;
-        dummy->next = newNode;
-        newNode->prev = dummy;
-        if (head == dummy)
+        if (p1.back().number == p2.back().number)
         {
-            dummy->prev = newNode;
-            newNode->next = dummy;
-            head = newNode;
+            p1.pop_back();
+            p2.pop_back();
+            return true;
+        }
+        return false;
+    }
+
+    void playOneRound()
+    {
+        if (compareAndRemove(player1, player2))
+        {
+            compareAndRemove(player3, player4);
             return;
         }
-        newNode->next = head;
-        head->prev = newNode;
-        head = newNode;
+        else if (compareAndRemove(player1, player3))
+        {
+            compareAndRemove(player2, player4);
+            return;
+        }
+        else if (compareAndRemove(player1, player4))
+        {
+            compareAndRemove(player2, player3);
+            return;
+        }
+        else if (compareAndRemove(player2, player3))
+        {
+            return;
+        }
+        else if (compareAndRemove(player2, player4))
+        {
+            return;
+        }
+        else if (compareAndRemove(player3, player4))
+        {
+            return;
+        }
+        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+        std::shuffle(player1.begin(), player1.end(), std::default_random_engine(seed));
+        std::shuffle(player2.begin(), player2.end(), std::default_random_engine(seed));
+        std::shuffle(player3.begin(), player3.end(), std::default_random_engine(seed));
+        std::shuffle(player4.begin(), player4.end(), std::default_random_engine(seed));
     }
 
-    void erase(const T &value)
+    bool isGameComplete() const
     {
-        auto cur = head, dummy = head->prev;
-        while (cur != dummy)
+        return player1.empty() || player2.empty() || player3.empty() || player4.empty();
+    }
+
+    void playGame()
+    {
+        while (not isGameComplete())
         {
-            if (*(cur->data) == value)
-            {
-                cur->prev->next = cur->next;
-                cur->next->prev = cur->prev;
-                if (cur == head)
-                    head = head->next;
-                delete cur;
-                n--;
-                return;
-            }
-            cur = cur->next;
+            playOneRound();
         }
     }
 
-    struct cir_list_it
+    int getWinner() const
     {
-    private:
-        node_ptr ptr;
-
-    public:
-        cir_list_it(node_ptr p) : ptr(p)
-        {
-        }
-
-        T &operator*()
-        {
-            return *(ptr->data);
-        }
-
-        node_ptr get()
-        {
-            return ptr;
-        }
-
-        cir_list_it &operator++()
-        {
-            ptr = ptr->next;
-            return *this;
-        }
-
-        cir_list_it operator++(int)
-        {
-            cir_list_it it = *this;
-            ++(*this);
-            return it;
-        }
-
-        cir_list_it &operator--()
-        {
-            ptr = ptr->prev;
-            return *this;
-        }
-
-        cir_list_it operator--(int)
-        {
-            cir_list_it it = *this;
-            --(*this);
-            return it;
-        }
-
-        friend bool operator==(const cir_list_it &it1, const cir_list_it &it2)
-        {
-            return it1.ptr == it2.ptr;
-        }
-
-        friend bool operator!=(const cir_list_it &it1, const cir_list_it &it2)
-        {
-            return it1.ptr != it2.ptr;
-        }
-    };
-
-    cir_list_it begin()
-    {
-        return cir_list_it{head};
-    }
-
-    cir_list_it begin() const
-    {
-        return cir_list_it{head};
-    }
-
-    cir_list_it end()
-    {
-        return cir_list_it{head->prev};
-    }
-
-    cir_list_it end() const
-    {
-        return cir_list_it{head->prev};
-    }
-
-    cir_list(const cir_list<T> &other) : cir_list()
-    {
-        // Although, the following will insert the elements in reverse order, it won’t matter in logical sense since this is a circular list.
-        for (const auto &i : other)
-            insert(i);
-    }
-
-    cir_list(const std::initializer_list<T> &il) : head(NULL), n(0)
-    {
-        // Although, the following will insert the elements in reverse order, it won’t matter in logical sense since this is a circular list.
-        for (const auto &i : il)
-            insert(i);
-    }
-
-    ~cir_list()
-    {
-        while (size())
-        {
-            erase(*(head->data));
-        }
-    }
-};
-
-struct playlist
-{
-    cir_list<int> list;
-
-    void insert(int song)
-    {
-        list.insert(song);
-    }
-
-    void erase(int song)
-    {
-        list.erase(song);
-    }
-
-    void loopOnce()
-    {
-        for (auto &song : list)
-            std::cout << song << " ";
-        std::cout << std::endl;
+        if (player1.empty())
+            return 1;
+        if (player2.empty())
+            return 2;
+        if (player3.empty())
+            return 3;
+        if (player4.empty())
+            return 4;
     }
 };
 
 int main()
 {
-    playlist pl;
-    pl.insert(1);
-    pl.insert(2);
-    std::cout << "Playlist : ";
-    pl.loopOnce();
-
-    playlist pl2 = pl;
-    pl2.erase(2);
-    pl2.insert(3);
-    std::cout << "Second playlist : ";
-    pl2.loopOnce();
+    game newGame;
+    newGame.buildDeck();
+    newGame.dealCards();
+    newGame.playGame();
+    auto winner = newGame.getWinner();
+    std::cout << "Player " << winner << " won the game." << std::endl;
 }

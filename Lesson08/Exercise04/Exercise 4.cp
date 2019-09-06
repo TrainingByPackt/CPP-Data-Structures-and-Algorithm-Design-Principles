@@ -1,7 +1,8 @@
-// Chapter 8 : Exercise 1
+// Chapter 8 : Exercise 4
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include <time.h>
 #include <iomanip>
 
@@ -116,17 +117,15 @@ vector<vector<bool>> SubsetSum_Tabulation(vector<int> &set)
 {
 	int maxSum = 0;
 
-	for(auto num : set)
+	for(int i = 0; i < set.size(); i++)
 	{
-		maxSum += num;
+		maxSum += set[i];
 	}
 
-	vector<vector<bool>> DP(set.size() + 1, vector<bool>(maxSum + 1, false));
+	vector<vector<bool>> DP(set.size() + 1, vector<bool>(maxSum + 1, 0));
 
 	for(int i = 0; i < set.size(); i++)
 	{
-		// Base case -- a subset sum of 0 can be found at any index
-
 		DP[i][0] = true;
 	}
 
@@ -148,15 +147,23 @@ vector<vector<bool>> SubsetSum_Tabulation(vector<int> &set)
 	return DP;
 }
 
-void GetTime(clock_t &timer)
+vector<string> types =
 {
-	// Subtract timer from current time to get time elapsed 
-	timer = clock() - timer;
+    "BRUTE FORCE",
+    "BACKTRACKING",
+    "MEMOIZATION",
+    "TABULATION"
+};
 
-	// Display seconds elapsed
-	cout << "TIME TAKEN: " << fixed << setprecision(5) << (float)timer / CLOCKS_PER_SEC << endl;
-
-	timer = clock(); // Reset timer
+void GetTime(clock_t &timer, string type)
+{
+    // Subtract timer from current time to get time elapsed
+    timer = clock() - timer;
+    
+    // Display seconds elapsed
+    cout << "TIME TAKEN USING " << type << ": " << fixed << setprecision(5) << (float)timer / CLOCKS_PER_SEC << endl;
+    
+    timer = clock(); // Reset timer
 }
 
 int main()
@@ -191,10 +198,7 @@ int main()
 			{
 				int total = 0;
 
-				for(auto num : set)
-				{
-					total += num;
-				}
+				for(auto number : set) total += number;
 
 				vector<vector<bool>> DP = SubsetSum_Tabulation(set);
 				found = DP[set.size()][target];
@@ -210,10 +214,7 @@ int main()
 				}
 				cout << "The set contains the following " << subsetSums.size() << " subset sums: ";
 
-				for(auto sum : subsetSums)
-				{
-					cout << sum << " ";
-				}
+				for(auto sum : subsetSums) cout << sum << " ";
 				cout << endl;
 				
 				break;
@@ -228,7 +229,8 @@ int main()
 		{
 			cout << "Subset with sum " << target << " was not found in the set." << endl;
 		}
-		GetTime(timer);
+		GetTime(timer, types[i]);
+        cout << endl;
 	}
 
 	return 0;

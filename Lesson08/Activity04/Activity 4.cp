@@ -1,9 +1,8 @@
-// Activity 8-1 (Melodic Permutations)
+// Chapter 8 : Activity 4
 
 #include <iostream>
 #include <vector>
 #include <map>
-
 using namespace std;
 
 int CountMelodicPermutations(vector<int> melody, vector<int> set)
@@ -96,4 +95,6 @@ int main()
 	int count = CountMelodicPermutations(ConvertNotes(melody), ConvertNotes(set));
 
 	cout << count << endl;
+    
+    return 0;
 }

@@ -1,11 +1,14 @@
+// Chapter 8 : Activity 3
+
 #include <iostream>
 #include <time.h>
 #include <iomanip>
 #include <algorithm>
 #include <utility>
 #include <vector>
+#include <strings.h>
 
-#define DEBUG 0
+#define DEBUG 1
 
 #if DEBUG
 #define PRINT(x) cerr << x
@@ -92,40 +95,87 @@ const int UNKNOWN = -1;
 
 int LCS_Memoization(string A, string B, int i, int j, vector<vector<int>> &memo)
 {
-	// Base case -- LCS is always zero for empty strings
 	if(i == 0 || j == 0)
 	{
 		return 0;
 	}
-
-	// Have we found a result for the prefixes of the two strings?
 	if(memo[i - 1][j - 1] != UNKNOWN)
 	{
-		// If so, return it
 		return memo[i - 1][j - 1];
 	}
 
-	// Are the last characters of A's prefix and B's prefix equal?
 	if(A[i-1] == B[j-1])
 	{
-		// LCS for this state is equal to 1 plus the LCS of the prefixes of A and B, both reduced by one character
 		memo[i - 1][j - 1] = 1 + LCS_Memoization(A, B, i - 1, j - 1, memo);
 
-		// Return the cached result
 		return memo[i - 1][j - 1];
 	}
-	// If the last characters are not equal, LCS for this state is equal to the maximum LCS of A’s prefix reduced by one character and B’s prefix, and B’s prefix reduced by one character and A’s prefix
 	memo[i - 1][j - 1] = max(LCS_Memoization(A, B, i - 1, j, memo),
 							 LCS_Memoization(A, B, i, j - 1, memo));
 
 	return memo[i - 1][j - 1];
 }
 
-void GetTime(clock_t &timer)
+string ReconstructLCS(vector<vector<int>> DP, string A, string B, int i, int j)
+{
+	if(i == 0 || j == 0)
+	{
+		return "";
+	}
+	if(A[i-1] == B[j-1])
+	{
+		return ReconstructLCS(DP, A, B, i-1, j-1) + A[i-1];
+	}
+	else if(DP[i-1][j] > DP[i][j-1])
+	{
+		return ReconstructLCS(DP, A, B, i-1, j);
+	}
+	else
+	{
+		return ReconstructLCS(DP, A, B, i, j-1);
+	}
+}
+
+string LCS_Tabulation(string A, string B)
+{
+	vector<vector<int>> DP(A.size() + 1, vector<int>(B.size() + 1));
+
+	for(int i = 0; i <= A.size(); i++)
+	{
+		for(int j = 0; j <= B.size(); j++)
+		{
+			if(i == 0 || j == 0)
+			{
+				DP[i][j] = 0;
+			}
+			else if(A[i-1] == B[j-1])
+			{
+				DP[i][j] = DP[i-1][j-1] + 1;
+			}
+			else
+			{
+				DP[i][j] = max(DP[i-1][j], DP[i][j-1]);
+			}
+		}
+	}
+
+	string lcs = ReconstructLCS(DP, A, B, A.size(), B.size());
+
+	return lcs;
+}
+
+vector<string> types =
+{
+    "BRUTE FORCE",
+    "MEMOIZATION",
+    "TABULATION"
+};
+
+void GetTime(clock_t &timer, string type)
 {
 	timer = clock() - timer;
 
-	cout << "TIME TAKEN: " << fixed << setprecision(5) << (float)timer / CLOCKS_PER_SEC << " SECONDS" << endl;
+    cout << "TIME TAKEN USING " << type << ": " << fixed << setprecision(5) << (float)timer / CLOCKS_PER_SEC << " SECONDS" << endl;
 
 	timer = clock();
 }
@@ -135,7 +185,7 @@ int main()
 	string A, B;
 	cin >> A >> B;
 
-	int tests = 2;
+	int tests = 3;
 
 	clock_t timer = clock();
 
@@ -148,23 +198,52 @@ int main()
 			case 0:
 			{
 				LCS = LCS_BruteForce(A, B, 0, 0, {});
-
-			#if DEBUG
-				PrintSubsequences(A, B);
-			#endif
-
+            #if DEBUG
+                PrintSubsequences(A, B);
+            #endif
 				break;
 			}
 			case 1:
 			{
 				vector<vector<int>> memo(A.size(), vector<int>(B.size(), UNKNOWN));
 				LCS = LCS_Memoization(A, B, A.size(), B.size(), memo);
+
+				break;
+			}
+			case 2:
+			{
+				string lcs = LCS_Tabulation(A, B);
+
+				LCS = lcs.size();
+
+				cout << "The longest common subsequence of " << A << " and " << B << " is: " << lcs << endl;
 				break;
 			}
 		}
 		cout << "Length of the longest common subsequence of " << A << " and " << B << " is: " << LCS << endl;
 
-		GetTime(timer);
+		GetTime(timer, types[i]);
+        
+        cout << endl;
 	}
 	return 0;
 }
+/*
+A1B2C3D4E ABCDE
+5
+ABCDE
+ 
+ABZCYDABAZADAEA YABAZADBBEAAECYACAZ
+10
+YABAZADAEA
+
+QWJEHFBEMVJEIIFJEEVFBEHFJXAJXBE BVBQHEJEJCHEEHXBNEBCHHEHHFEHSBE
+14
+QHEJEJEEBEHFBE
+ 
+AAA12AAA3AA4AA56AA7AAA8 AA1AA2AAA3A4A5A6AA7A89AAA
+19
+AA12AAA3A4A56AA7AAA
+
+ */
+

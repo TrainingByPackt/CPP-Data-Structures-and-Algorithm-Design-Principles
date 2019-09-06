@@ -1,9 +1,10 @@
-// Chapter 8 : Exercise 1
+// Chapter 8 : Exercise 2
 
 #include <iostream>
 #include <vector>
 #include <time.h>
 #include <iomanip>
+#include <algorithm>
 
 #define DEBUG 0
 
@@ -63,33 +64,44 @@ bool SubsetSum_BruteForce(vector<int> set, int target)
 	return false;
 }
 
-bool SubsetSum_Backtracking(vector<int> &set, int sum, int i)
+bool SubsetSum_Backtracking(vector<int> set, int sum, int i)
 {
 	// The sum has been found
+
 	if(sum == 0)
 	{
 		return true;
 	}
 
 	// End of set is reached, or sum would be exceeded beyond this point
+
 	if(i == set.size() || set[i] > sum)
 	{
 		return false;
 	}
 
-	// Case 1: Add to sum (subtract from target)
+	// Case 1: Add to sum
 	// Case 2: Leave as-is
+
 	return SubsetSum_Backtracking(set, sum - set[i], i + 1)
 		|| SubsetSum_Backtracking(set, sum, i + 1);
 }
 
-void GetTime(clock_t &timer)
+vector<string> types =
+{
+    "BRUTE FORCE",
+    "BACKTRACKING",
+    "MEMOIZATION",
+    "TABULATION"
+};
+
+void GetTime(clock_t &timer, string type)
 {
 	// Subtract timer from current time to get time elapsed
 	timer = clock() - timer;
 
 	// Display seconds elapsed
-	cout << "TIME TAKEN: " << fixed << setprecision(5) << (float)timer / CLOCKS_PER_SEC << endl;
+	cout << "TIME TAKEN USING " << type << ": " << fixed << setprecision(5) << (float)timer / CLOCKS_PER_SEC << endl;
 
 	timer = clock(); // Reset timer
 }
@@ -123,8 +135,10 @@ int main()
 		{
 			cout << "Subset with sum " << target << " was not found in the set." << endl;
 		}
-		GetTime(timer);
+		GetTime(timer, types[i]);        
+        cout << endl;
 	}
+
 	return 0;
 }
 

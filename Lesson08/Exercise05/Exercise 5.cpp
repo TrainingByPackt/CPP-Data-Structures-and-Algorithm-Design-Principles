@@ -1,9 +1,12 @@
+// Chapter 8 : Exercise 5
+
 #include <iostream>
 #include <time.h>
 #include <iomanip>
 #include <algorithm>
 #include <utility>
 #include <vector>
+#include <strings.h>
 
 #define DEBUG 1
 
@@ -19,7 +22,6 @@ vector<vector<pair<int, int>>> found;
 
 int LCS_BruteForce(string A, string B, int i, int j, vector<pair<int, int>> subsequence)
 {
-	// If i exceeds length of A, or j exceeds length of B:
 	if(i >= A.size() || j >= B.size())
 	{
 		found.push_back(subsequence);
@@ -38,11 +40,11 @@ int LCS_BruteForce(string A, string B, int i, int j, vector<pair<int, int>> subs
 		return LCS_BruteForce(A, B, i + 1, j + 1, subsequence);
 	}
 	/*
-	 	Option 1) Explore further possibilities with i + 1, and j
-	 	Option 2) Explore further possibilities with i, and j + 1
+	 Option 1) Explore further possibilities with i + 1, and j
+	 Option 2) Explore further possibilities with i, and j + 1
 
-	 	LCS from this state is equal to maximum value of Option 1 and Option 2
-	*/
+	 LCS from this state is equal to maximum value of Option 1 and Option 2
+	 */
 
 	return max(LCS_BruteForce(A, B, i + 1, j, subsequence),
 			   LCS_BruteForce(A, B, i, j + 1, subsequence));
@@ -98,9 +100,7 @@ int main()
 
 	cout << "Length of the longest common subsequence of " << A << " and " << B << " is: " << LCS << endl;
 
-#if DEBUG
 	PrintSubsequences(A, B);
-#endif
-
-	return 0;
 }
+
+

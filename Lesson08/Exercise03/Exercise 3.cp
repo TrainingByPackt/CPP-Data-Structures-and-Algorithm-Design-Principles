@@ -1,7 +1,8 @@
-// Chapter 8 : Exercise 1
+// Chapter 8 : Exercise 3
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include <time.h>
 #include <iomanip>
 
@@ -86,20 +87,22 @@ bool SubsetSum_Backtracking(vector<int> set, int sum, int i)
 
 bool SubsetSum_Memoization(vector<int> &set, int sum, int i, vector<vector<int>> &memo)
 {
+	// The sum has been found
 	if(sum == 0)
 	{
 		return true;
 	}
 
+	// End of set is reached, or sum would be exceeded beyond this point
 	if(i == set.size() || set[i] > sum)
 	{
 		return false;
 	}
 
-	// Is this state's solution cached?
+	// Is this state cached?
 	if(memo[i][sum] == UNKNOWN)
 	{
-		// If not, find the solution for this state and cache it
+		// Get solution for this state and cache it
 
 		bool append = SubsetSum_Memoization(set, sum - set[i], i + 1, memo);
 		bool ignore = SubsetSum_Memoization(set, sum, i + 1, memo);
@@ -110,15 +113,23 @@ bool SubsetSum_Memoization(vector<int> &set, int sum, int i, vector<vector<int>>
 	return memo[i][sum];
 }
 
-void GetTime(clock_t &timer)
+vector<string> types =
 {
-	// Subtract timer from current time to get time elapsed
-	timer = clock() - timer;
+    "BRUTE FORCE",
+    "BACKTRACKING",
+    "MEMOIZATION",
+    "TABULATION"
+};
 
-	// Display seconds elapsed
-	cout << "TIME TAKEN: " << fixed << setprecision(5) << (float)timer / CLOCKS_PER_SEC << endl;
-
-	timer = clock(); // Reset timer
+void GetTime(clock_t &timer, string type)
+{
+    // Subtract timer from current time to get time elapsed
+    timer = clock() - timer;
+    
+    // Display seconds elapsed
+    cout << "TIME TAKEN USING " << type << ": " << fixed << setprecision(5) << (float)timer / CLOCKS_PER_SEC << endl;
+    
+    timer = clock(); // Reset timer
 }
 
 int main()
@@ -158,7 +169,8 @@ int main()
 		{
 			cout << "Subset with sum " << target << " was not found in the set." << endl;
 		}
-		GetTime(timer);
+		GetTime(timer, types[i]);
+        cout << endl;
 	}
 	return 0;
 }

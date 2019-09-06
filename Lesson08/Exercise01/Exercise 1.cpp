@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 #define DEBUG 1
 
@@ -15,18 +16,15 @@ using namespace std;
 
 void GetAllSubsets(vector<int> set, vector<int> subset, int index, vector<vector<vector<int>>> &allSubsets)
 {
-	// Terminate if the end of the set is reached
 	if(index == set.size())
 	{
-		// Add the accumulated subset to the results, indexed by size
 		allSubsets[subset.size()].push_back(subset);
 		return;
 	}
-	// Continue without adding element to subset
 	GetAllSubsets(set, subset, index + 1, allSubsets);
 
-	// Add element to subset
 	subset.push_back(set[index]);
+
 	GetAllSubsets(set, subset, index + 1, allSubsets);
 }
 

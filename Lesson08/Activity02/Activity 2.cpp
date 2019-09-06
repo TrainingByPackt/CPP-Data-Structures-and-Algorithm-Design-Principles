@@ -1,11 +1,14 @@
+// Chapter 8 : Activity 2
+
 #include <iostream>
 #include <time.h>
 #include <iomanip>
 #include <algorithm>
 #include <utility>
 #include <vector>
+#include <strings.h>
 
-#define DEBUG 1
+#define DEBUG 0
 
 #if DEBUG
 #define PRINT(x) cerr << x
@@ -113,59 +116,18 @@ int LCS_Memoization(string A, string B, int i, int j, vector<vector<int>> &memo)
 	return memo[i - 1][j - 1];
 }
 
-string ReconstructLCS(vector<vector<int>> &DP, string &A, string &B, int i, int j)
+vector<string> types =
 {
-	if(i == 0 || j == 0)
-	{
-		return "";
-	}
-	if(A[i-1] == B[j-1])
-	{
-		return ReconstructLCS(DP, A, B, i-1, j-1) + A[i-1];
-	}
-	else if(DP[i-1][j] > DP[i][j-1])
-	{
-		return ReconstructLCS(DP, A, B, i-1, j);
-	}
-	else
-	{
-		return ReconstructLCS(DP, A, B, i, j-1);
-	}
-}
+    "BRUTE FORCE",
+    "MEMOIZATION",
+    "TABULATION"
+};
 
-string LCS_Tabulation(string A, string B)
-{
-	vector<vector<int>> DP(A.size() + 1, vector<int>(B.size() + 1));
-
-	for(int i = 0; i <= A.size(); i++)
-	{
-		for(int j = 0; j <= B.size(); j++)
-		{
-			if(i == 0 || j == 0)
-			{
-				DP[i][j] = 0;
-			}
-			else if(A[i-1] == B[j-1])
-			{
-				DP[i][j] = DP[i-1][j-1] + 1;
-			}
-			else
-			{
-				DP[i][j] = max(DP[i-1][j], DP[i][j-1]);
-			}
-		}
-	}
-
-	string lcs = ReconstructLCS(DP, A, B, A.size(), B.size());
-
-	return lcs;
-}
-
-void GetTime(clock_t &timer)
+void GetTime(clock_t &timer, string type)
 {
 	timer = clock() - timer;
 
-	cout << "TIME TAKEN: " << fixed << setprecision(5) << (float)timer / CLOCKS_PER_SEC << " SECONDS" << endl;
+    cout << "TIME TAKEN USING " << type << ": " << fixed << setprecision(5) << (float)timer / CLOCKS_PER_SEC << " SECONDS" << endl;
 
 	timer = clock();
 }
@@ -175,11 +137,11 @@ int main()
 	string A, B;
 	cin >> A >> B;
 
-	int tests = 3;
+	int tests = 2;
 
 	clock_t timer = clock();
 
-	for(int i = 1; i < tests; i++)
+	for(int i = 0; i < tests; i++)
 	{
 		int LCS;
 
@@ -188,35 +150,40 @@ int main()
 			case 0:
 			{
 				LCS = LCS_BruteForce(A, B, 0, 0, {});
-
-			#if DEBUG
-				PrintSubsequences(A, B);
-			#endif
-
+                
+            #if DEBUG
+                PrintSubsequences(A, B);
+            #endif
 				break;
 			}
 			case 1:
 			{
 				vector<vector<int>> memo(A.size(), vector<int>(B.size(), UNKNOWN));
 				LCS = LCS_Memoization(A, B, A.size(), B.size(), memo);
-
-				break;
-			}
-			case 2:
-			{
-				string lcs = LCS_Tabulation(A, B);
-
-				LCS = lcs.size();
-
-				cout << "The longest common subsequence of " << A << " and " << B << " is: " << lcs << endl;
 				break;
 			}
 		}
 		cout << "Length of the longest common subsequence of " << A << " and " << B << " is: " << LCS << endl;
 
-		GetTime(timer);
+		GetTime(timer, types[i]);        
+        cout << endl;
 	}
 	return 0;
 }
-// ABCABDBEFBA ABCBEFBEAB
+/*
+123456 QWERTY
+= 0
+
+ACBEBC ABCBC
+= 4
+
+AZYBYXCXW ZZAYYBXXXCWW
+= 6
+
+ABCABDBEFBA ABCBEFBEAB
+= 8
+ 
+ABZCYDABAZADAEA YABAZADBBEAAECYACAZ
+= 10
+*/
 

@@ -1,117 +1,149 @@
 #include <iostream>
-#include <queue>
 
 struct node
 {
-    std::string name;
-    node *first, *second;
+    int data;
+    node *left, *right;
 };
 
-struct family_tree
+struct bst
 {
     node *root;
 
-    static family_tree create_family(const std::string &name)
+    node *find(int value)
     {
-        family_tree family;
-        family.root = new node{name, NULL, NULL};
-        return family;
+        return find_impl(root, value);
     }
 
-    static node *find(node *root, const std::string &value)
+private:
+    node *find_impl(node *current, int value)
     {
-        if (root == NULL)
+        if (!current)
             return NULL;
-        if (root->name == value)
-            return root;
-        auto firstFound = family_tree::find(root->first, value);
-        if (firstFound != NULL)
-            return firstFound;
-        return family_tree::find(root->second, value);
+        if (current->data == value)
+            return current;
+        if (value < current->data, value) // Value will be in the left subtree
+            return find_impl(current->left, value);
+        if (value > current->data, value) // Value will be in the right subtree
+            return find_impl(current->right, value);
     }
 
-    bool addChild(const std::string &father, const std::string &son)
+public:
+    void insert(int value)
     {
-        auto fatherNode = family_tree::find(root, father);
-        if (not fatherNode)
-        {
-            std::cout << "No person named " << father << std::endl;
-            return false;
-        }
-        if (fatherNode->first && fatherNode->second)
-        {
-            std::cout << father << " already has 2 sons." << std::endl;
-            return false;
-        }
-        if (not fatherNode->first)
-            fatherNode->first = new node{son, NULL, NULL};
+        if (!root)
+            root = new node{value, NULL, NULL};
         else
-            fatherNode->second = new node{son, NULL, NULL};
-        return true;
+            insert_impl(root, value);
     }
 
-    static void preOrder(node *start)
+private:
+    void insert_impl(node *current, int value)
     {
-        if (not start)
-            return;
-        std::cout << start->name << " ";
-        preOrder(start->first);
-        preOrder(start->second);
+        if (value < current->data)
+        {
+            if (!current->left)
+                current->left = new node{value, NULL, NULL};
+            else
+                insert_impl(current->left, value);
+        }
+        else
+        {
+            if (!current->right)
+                current->right = new node{value, NULL, NULL};
+            else
+                insert_impl(current->right, value);
+        }
     }
 
-    static void inOrder(node *start)
+public:
+    void inorder()
     {
-        if (not start)
+        inorder_impl(root);
+    }
+
+private:
+    void inorder_impl(node *start)
+    {
+        if (!start)
             return;
-        inOrder(start->first);
-        std::cout << start->name << " ";
-        inOrder(start->second);
+        inorder_impl(start->left);       // Visit the left sub-tree
+        std::cout << start->data << " "; // Print out the current node
+        inorder_impl(start->right);      // Visit the right sub-tree
+    }
+
+public:
+    node *successor(node *start)
+    {
+        auto current = start->right;
+        while (current && current->left)
+            current = current->left;
+        return current;
+    }
+
+    void deleteValue(int value)
+    {
+        root = delete_impl(root, value);
+    }
+
+private:
+    node *delete_impl(node *start, int value)
+    {
+        if (!start)
+            return NULL;
+        if (value < start->data)
+            start->left = delete_impl(start->left, value);
+        else if (value > start->data)
+            start->right = delete_impl(start->right, value);
+        else
+        {
+            if (!start->left) // Either both children are absent or only left child is absent
+            {
+                auto tmp = start->right;
+                delete start;
+                return tmp;
+            }
+            if (!start->right) // Only right child is absent
+            {
+                auto tmp = start->left;
+                delete start;
+                return tmp;
+            }
+
+            auto succNode = successor(start);
+            start->data = succNode->data;
+            // Delete the successor from right subtree, since it will always be in the right subtree
+            start->right = delete_impl(start->right, succNode->data);
+        }
+        return start;
     }
 };
 
 int main()
 {
-    auto tree = family_tree::create_family("Shantanu");
-    if (tree.addChild("Shantanu", "Bhishma"))
-        std::cout << "Added Bhishma in the tree." << std::endl;
-    else
-        std::cout << "Couldn’t add Bhishma in the tree" << std::endl;
+    bst tree;
+    tree.insert(12);
+    tree.insert(10);
+    tree.insert(20);
+    tree.insert(8);
+    tree.insert(11);
+    tree.insert(15);
+    tree.insert(28);
+    tree.insert(4);
+    tree.insert(2);
 
-    if (tree.addChild("Shantanu", "Vyaas"))
-        std::cout << "Added Vyaas in the tree." << std::endl;
-    else
-        std::cout << "Couldn’t add Vyaas in the tree" << std::endl;
-
-    if (tree.addChild("Vyaas", "Dhrishtra"))
-        std::cout << "Added Dhrishtra in the tree." << std::endl;
-    else
-        std::cout << "Couldn’t add Dhrishtra in the tree" << std::endl;
-
-    if (tree.addChild("Vyaas", "Pandu"))
-        std::cout << "Added Pandu in the tree." << std::endl;
-    else
-        std::cout << "Couldn’t add Pandu in the tree" << std::endl;
-
-    if (tree.addChild("Pandu", "Arjun"))
-        std::cout << "Added Arjun in the tree." << std::endl;
-    else
-        std::cout << "Couldn’t add Arjun in the tree" << std::endl;
-
-    if (tree.addChild("Pandu", "Yudhishthir"))
-        std::cout << "Added Yudhishthir in the tree." << std::endl;
-    else
-        std::cout << "Couldn’t add Yudhishthir in the tree" << std::endl;
-
-    if (tree.addChild("Pandu", "Bhima"))
-        std::cout << "Added Bhima in the tree." << std::endl;
-    else
-        std::cout << "Couldn’t add Bhima in the tree" << std::endl;
-
-    std::cout << "Preorder:\t";
-    family_tree::preOrder(tree.root);
+    std::cout << "Inorder: ";
+    tree.inorder(); // This will print all the elements in ascending order
     std::cout << std::endl;
 
-    std::cout << "Inorder:\t";
-    family_tree::inOrder(tree.root);
+    tree.deleteValue(12);
+    std::cout << "Inorder after deleting 12: ";
+    tree.inorder(); // This will print all the elements in ascending order
     std::cout << std::endl;
+
+    if (tree.find(12))
+        std::cout << "Element 12 is present in the tree" << std::endl;
+    else
+        std::cout
+            << "Element 12 is NOT present in the tree" << std::endl;
 }

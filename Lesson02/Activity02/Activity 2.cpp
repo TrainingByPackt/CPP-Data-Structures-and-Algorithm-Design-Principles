@@ -1,127 +1,56 @@
 #include <iostream>
+#include <algorithm>
 #include <vector>
-#include <limits>
-#include <queue>
 
-enum class city : int
+struct node
 {
-    DELHI,
-    AHMEDABAD,
-    MUMBAI,
-    KOLKATA,
-    GOA,
-    BENGALURU,
-    CHENNAI
+    int data;
+    int listPosition;
+    int dataPosition;
 };
 
-std::ostream &operator<<(std::ostream &os, const city c)
+std::vector<int> merge(const std::vector<std::vector<int>> &input)
 {
-    switch (c)
-    {
-    case city::DELHI:
-        os << "DELHI";
-        return os;
-    case city::AHMEDABAD:
-        os << "AHMEDABAD";
-        return os;
-    case city::MUMBAI:
-        os << "MUMBAI";
-        return os;
-    case city::KOLKATA:
-        os << "KOLKATA";
-        return os;
-    case city::GOA:
-        os << "GOA";
-        return os;
-    case city::BENGALURU:
-        os << "BENGALURU";
-        return os;
-    case city::CHENNAI:
-        os << "CHENNAI";
-        return os;
-    default:
-        return os;
-    }
-}
+    auto comparator = [](const node &left, const node &right) {
+        if (left.data == right.data)
+            return left.listPosition > right.listPosition;
+        return left.data > right.data;
+    };
 
-struct graph
-{
-    std::vector<std::vector<std::pair<int, int>>> data;
-
-    graph(int n)
+    std::vector<node> heap;
+    for (int i = 0; i < input.size(); i++)
     {
-        data = std::vector(n, std::vector<std::pair<int, int>>());
+        heap.push_back({input[i][0], i, 0});
+        std::push_heap(heap.begin(), heap.end(), comparator);
     }
 
-    void addEdge(const city c1, const city c2, int dis)
+    std::vector<int> result;
+    while (!heap.empty())
     {
-        std::cout << "ADD: " << c1 << "-" << c2 << "=" << dis << std::endl;
+        std::pop_heap(heap.begin(), heap.end(), comparator);
+        auto min = heap.back();
+        heap.pop_back();
 
-        auto n1 = static_cast<int>(c1);
-        auto n2 = static_cast<int>(c2);
-        data[n1].push_back({n2, dis});
-        data[n2].push_back({n1, dis});
-    }
-
-    std::vector<int> dijkstra(const city source)
-    {
-        using heap_node = std::pair<int, int>;
-        std::priority_queue<heap_node, std::vector<heap_node>, std::greater<heap_node>> pq;
-
-        std::vector<int> distances(data.size(), std::numeric_limits<int>::max());
-        int source_id = static_cast<int>(source);
-        pq.push({0, source_id});
-        distances[source_id] = 0;
-
-        while (not pq.empty())
+        result.push_back(min.data);
+        int nextIndex = min.dataPosition + 1;
+        if (nextIndex < input[min.listPosition].size())
         {
-            auto next_node = pq.top().second;
-            pq.pop();
-
-            for (auto child : data[next_node])
-            {
-                auto dis = child.first;
-                auto vertex = child.second;
-                if (distances[vertex] > distances[next_node] + dis)
-                {
-                    distances[vertex] = distances[next_node] + dis;
-                    pq.push({distances[vertex], vertex});
-                }
-            }
+            heap.push_back({input[min.listPosition][nextIndex], min.listPosition, nextIndex});
+            std::push_heap(heap.begin(), heap.end(), comparator);
         }
-
-        return distances;
     }
-};
+
+    return result;
+}
 
 int main()
 {
-    graph g(7);
-    g.addEdge(city::AHMEDABAD, city::DELHI, 900);
-    g.addEdge(city::AHMEDABAD, city::MUMBAI, 500);
-    g.addEdge(city::AHMEDABAD, city::GOA, 1000);
-    g.addEdge(city::MUMBAI, city::DELHI, 1000);
-    g.addEdge(city::MUMBAI, city::GOA, 500);
-    g.addEdge(city::GOA, city::BENGALURU, 200);
-    g.addEdge(city::MUMBAI, city::KOLKATA, 1500);
-    g.addEdge(city::GOA, city::CHENNAI, 500);
-    g.addEdge(city::DELHI, city::KOLKATA, 1000);
-    g.addEdge(city::BENGALURU, city::CHENNAI, 300);
-    g.addEdge(city::KOLKATA, city::CHENNAI, 700);
-
-    auto abadDistances = g.dijkstra(city::AHMEDABAD);
-    std::cout << "Distances from Ahmedabad to other cities:" << std::endl;
-    for (int i = 0; i < abadDistances.size(); i++)
-    {
-        std::cout << static_cast<city>(i) << ": " << abadDistances[i] << std::endl;
-    }
-
-    auto kktDistances = g.dijkstra(city::KOLKATA);
-    std::cout << "Distances from Kolkata to other cities:" << std::endl;
-    for (int i = 0; i < kktDistances.size(); i++)
-    {
-        std::cout << static_cast<city>(i) << ": " << kktDistances[i] << std::endl;
-    }
-
+    std::vector<int> v1 = {1, 3, 8, 15, 105};
+    std::vector<int> v2 = {2, 3, 10, 11, 16, 20, 25};
+    std::vector<int> v3 = {-2, 100, 1000};
+    std::vector<int> v4 = {-1, 0, 14, 18};
+    auto result = merge({v1, v2, v3, v4});
+    for (auto i : result)
+        std::cout << i << ' ';
     return 0;
 }

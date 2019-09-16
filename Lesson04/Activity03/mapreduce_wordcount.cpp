@@ -1,7 +1,5 @@
 // Copyright (c) 2009-2016 Craig Henderson
 // https://github.com/cdmh/mapreduce
-//
-// Adapted by Payas Rajan <payasrajan@live.com>
 
 #include <boost/config.hpp>
 
@@ -143,7 +141,7 @@ namespace {
 		auto ite = job.end_results();
 		if (it != ite)
 		{
-			std::cout << "\n\nMapReduce results:";
+			std::cout << std::endl << "MapReduce results:" << std::endl;
 
 			using frequencies_t = std::list<typename Job::keyvalue_t>;
 			frequencies_t frequencies;
@@ -170,38 +168,13 @@ namespace {
 
 			frequencies.sort(mapreduce::detail::greater_2nd<typename Job::keyvalue_t>);
 			for (auto& freq : frequencies)
-				std::cout << "\n" << freq.first << "\t" << freq.second;
-		}
-	}
-
-	template<typename Job>
-	void run_wordcount(mapreduce::specification const& spec)
-	{
-		std::cout << "\n" << typeid(Job).name() << "\n";
-
-		try
-		{
-			mapreduce::results result;
-			typename Job::datasource_type datasource(spec);
-
-			Job job(datasource, spec);
-			std::cout << "\nRunning Parallel WordCount MapReduce...";
-			job.run<mapreduce::schedule_policy::cpu_parallel<Job> >(result);
-
-			std::cout << "\nMapReduce Finished.";
-
-			write_stats(result);
-			write_frequency_table(job);
-		}
-		catch (std::exception& e)
-		{
-			std::cout << "\nError: " << e.what();
+				std::cout << freq.first << "\t" << freq.second << std::endl;
 		}
 	}
 
 }   // anonymous namespace
 
-int main(int argc, char** argv)
+int main(int argc, char* argv[])
 {
 	std::cout << "MapReduce Word Frequency Application";
 	if (argc < 2)
@@ -210,6 +183,7 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
+	// Prepare the MapReduce specification from the input directory name
 	mapreduce::specification spec;
 	spec.input_directory = argv[1];
 	
@@ -219,10 +193,26 @@ int main(int argc, char** argv)
 	std::cout << std::endl << "Using" 
 		<< std::max(1U, std::thread::hardware_concurrency()) << " CPU cores";
 
-	run_wordcount<
-		mapreduce::job<
-		wordcount::map_task,
-		wordcount::reduce_task<std::string>> >(spec);
+	// Create and run the job
+	using Job= mapreduce::job<wordcount::map_task, wordcount::reduce_task<std::string>>;
+	try
+	{
+		mapreduce::results result;
+		typename Job::datasource_type datasource(spec);
+
+		Job job(datasource, spec);
+		std::cout << "\nRunning Parallel WordCount MapReduce...";
+		job.run<mapreduce::schedule_policy::cpu_parallel<Job> >(result);
+
+		std::cout << "\nMapReduce Finished.";
+
+		write_stats(result);
+		write_frequency_table(job);
+	}
+	catch (std::exception& e)
+	{
+		std::cout << "\nError: " << e.what();
+	}
 
 	return 0;
 }

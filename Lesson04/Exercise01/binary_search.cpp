@@ -44,7 +44,7 @@ void run_small_search_test()
 
 	std::sort(S.begin(), S.end());
 
-	if (binary_search(N, S))
+	if (linear_search(N, S))
 		std::cout << "Element found in set by linear search!" << std::endl;
 	else
 		std::cout << "Element not found." << std::endl;
@@ -67,13 +67,11 @@ void run_large_search_test(int size, int N)
 	for (auto i = 0; i < size; i++)
 		S.push_back(uniform_dist(rand));
 
-	// Sort the array
 	std::sort(S.begin(), S.end());
 
 	// To measure the time taken, start the clock
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
-	// Search
 	bool search_result = binary_search(111, S);
 
 	// Stop the clock

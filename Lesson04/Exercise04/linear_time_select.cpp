@@ -100,7 +100,6 @@ void quick_sort(typename std::vector<T>::iterator begin,
 template<typename T>
 auto find_median(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator last)
 {
-	// Sort the array
 	quick_sort<T>(begin, last);
 
 	// Return the middle element, i.e. median

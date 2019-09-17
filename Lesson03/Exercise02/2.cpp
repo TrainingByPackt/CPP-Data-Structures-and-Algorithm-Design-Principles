@@ -44,7 +44,7 @@ public:
 
 int main()
 {
-    hash_map map(100); // Let’s go with 100 as its easier for calculation.
+    hash_map map(7);
 
     auto print = [&](int value) {
         if (map.find(value))
@@ -54,22 +54,13 @@ int main()
         std::cout << std::endl;
     };
 
-    map.insert(3135); // Inserts at position 35
-    map.insert(3);    // Inserts at position 3
-    map.insert(34);   // Inserts at position 34
-
-    print(35);
-    print(34);
-    print(10);
-
-    map.insert(55);
-    map.erase(155);
-    print(55);
-    map.erase(55);
-    print(55);
+    map.insert(2);
+    map.insert(25);
+    map.insert(290);
 
     map.insert(100);
-    map.insert(0);
-    print(0);
+    map.insert(55);
+
     print(100);
+    map.erase(2);
 }

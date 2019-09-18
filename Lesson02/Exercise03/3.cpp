@@ -8,7 +8,7 @@ struct node
 
 struct bst
 {
-    node *root;
+    node *root = nullptr;
 
     node *find(int value)
     {
@@ -19,13 +19,23 @@ private:
     node *find_impl(node *current, int value)
     {
         if (!current)
+        {
+            std::cout << std::endl;
             return NULL;
+        }
         if (current->data == value)
+        {
+            std::cout << "Found " << value << std::endl;
             return current;
-        if (value < current->data, value) // Value will be in the left subtree
+        }
+        if (value < current->data) // Value will be in the left subtree
+        {
+            std::cout << "Going left from " << current->data << ", ";
             return find_impl(current->left, value);
-        if (value > current->data, value) // Value will be in the right subtree
-            return find_impl(current->right, value);
+        }
+        // Value will be in the right subtree
+        std::cout << "Going right from " << current->data << ", ";
+        return find_impl(current->right, value);
     }
 
 public:
@@ -144,6 +154,5 @@ int main()
     if (tree.find(12))
         std::cout << "Element 12 is present in the tree" << std::endl;
     else
-        std::cout
-            << "Element 12 is NOT present in the tree" << std::endl;
+        std::cout << "Element 12 is NOT present in the tree" << std::endl;
 }

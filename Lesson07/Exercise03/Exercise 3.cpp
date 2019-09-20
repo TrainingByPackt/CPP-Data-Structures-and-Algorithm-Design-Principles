@@ -1,120 +1,204 @@
-// Chapter 7 : Exercise 3
+// Chapter 7: Exercise 3
 
 #include <iostream>
 #include <vector>
-#include <stack>
-#include <queue>
+#include <climits>
 
 using namespace std;
 
-void FillStack(int node, vector<bool> &visited, vector<vector<int>> &adj, stack<int> &stack)
+struct Edge
 {
-	visited[node] = true;
+	int start;  // The starting vertex
+	int end;    // The destination vertex
+	int weight; // The edge weight
 
-	for (auto next : adj[node])
+	// Constructor
+	Edge(int s, int e, int w) : start(s), end(e), weight(w) {}
+};
+
+
+// Constant assigned the highest 32-bit integer value, used to designate
+// untraversed vertices
+
+const int UNKNOWN = INT_MAX;
+
+vector<Edge*> edges; // Collection of edge pointers
+int V; 				 // Total number of vertices in the graph
+int E; 				 // Total number of edges in the graph
+
+
+
+// Find vertex with shortest distance from current position and return its index
+
+int GetMinDistance(vector<int> &distance, vector<bool> &visited)
+{
+	int minDistance = UNKNOWN;
+	int result;
+
+	for(int v = 0; v < distance.size(); v++)
 	{
-		if (!visited[next])
+		if(!visited[v] && distance[v] <= minDistance)
 		{
-			FillStack(next, visited, adj, stack);
+			minDistance = distance[v];
+			result = v;
 		}
 	}
-	stack.push(node);
+	return result;
+
 }
 
-void CollectConnectedComponents(int node, vector<bool> &visited, vector<vector<int>> &adj, vector<int> &component)
+vector<int> Dijkstra(int V, int start, vector<Edge*> edges)
 {
-	visited[node] = true;
-	component.push_back(node);
+	vector<int> distance(V, UNKNOWN);
+	vector<bool> visited(V, false);
 
-	for (auto next : adj[node])
+	distance[start] = 0;
+
+	for(int i = 0; i < V - 1; i++)
 	{
-		if (!visited[next])
+		int curr = GetMinDistance(distance, visited);
+
+		visited[curr] = true;
+
+		for(auto edge : edges)
 		{
-			CollectConnectedComponents(next, visited, adj, component);
+			if(edge->start != curr) continue;
+			if(visited[edge->end]) continue;
+
+			if(distance[curr] != UNKNOWN && distance[curr] + edge->weight < distance[edge->end])
+			{
+				distance[edge->end] = distance[curr] + edge->weight;
+			}
 		}
 	}
+	return distance;
 }
 
-vector<vector<int>> Transpose(int V, vector<vector<int>> adj)
+bool HasNegativeCycle(vector<int> distance, vector<Edge*> edges)
 {
-	vector<vector<int>> transpose(V);
+	// Iterate through edges one last time
+	for(auto edge : edges)
+	{
+		int u = edge->start;
+		int v = edge->end;
+		int w = edge->weight;
+
+		if(distance[u] == UNKNOWN) continue;
+
+		// If we can still find any path shorter than one we have already found, the graph must contain
+		// a negative cycle.
+
+		if(distance[u] + w < distance[v])
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+vector<int> BellmanFord(int V, vector<Edge*> edges)
+{
+	vector<int> distance(V + 1, UNKNOWN);
+
+	int s = V;
 
 	for(int i = 0; i < V; i++)
 	{
-		for(auto next : adj[i])
+		edges.push_back(new Edge(s, i, 0));
+	}
+
+	distance[s] = 0;
+
+	for(int i = 1; i < V; i++)
+	{
+		for(auto edge : edges)
 		{
-			transpose[next].push_back(i);
+			int u = edge->start;
+			int v = edge->end;
+			int w = edge->weight;
+
+			if(distance[u] == UNKNOWN)
+			{
+				continue;
+			}
+			if(distance[u] + w < distance[v])
+			{
+				distance[v] = distance[u] + w;
+			}
 		}
 	}
-	return transpose;
+	if(HasNegativeCycle(distance, edges))
+	{
+		cout << "NEGATIVE CYCLE FOUND" << endl;
+
+		return {};
+	}
+
+	// Remove extra element from distance array
+	distance.pop_back();
+
+	return distance;
+
 }
 
-vector<vector<int>> Kosaraju(int V, vector<vector<int>> adj)
+void Johnson(int V, vector<Edge*> edges)
 {
-	vector<bool> visited(V, false);
-	stack<int> stack;
+	// Get distance array from modified graph
+	vector<int> h = BellmanFord(V, edges);
 
-	for (int i = 0; i < V; i++)
+	// Terminate if empty
+	if(h.empty())
 	{
-		if (!visited[i])
+		return;
+	}
+
+	// Apply reweighting formula to each edge
+	for(int i = 0; i < edges.size(); i++)
+	{
+		edges[i]->weight += (h[edges[i]->start] - h[edges[i]->end]);
+	}
+
+	// Create a matrix for storing distance values
+	vector<vector<int>> shortest(V);
+
+	// Retrieve shortest distances for each vertex
+	for(int i = 0; i < V; i++)
+	{
+		shortest[i] = Dijkstra(V, i, edges);
+	}
+
+	// Reweight again in reverse to get original values
+	for(int i = 0; i < V; i++)
+	{
+		cout << i << ":\n";
+
+		for(int j = 0; j < V; j++)
 		{
-			FillStack(i, visited, adj, stack);
+			if(shortest[i][j] != UNKNOWN)
+			{
+				shortest[i][j] += h[j] - h[i];
+
+				cout << "\t" << j << ": " << shortest[i][j] << endl;
+			}
 		}
 	}
-	vector<vector<int>> transpose = Transpose(V, adj); 
-
-	fill(visited.begin(), visited.end(), false);
-
-	vector<vector<int>> connectedComponents;
-
-	while (!stack.empty())
-	{
-		int node = stack.top();
-
-		stack.pop();
-
-		if (!visited[node])
-		{
-			vector<int> component;
-
-			CollectConnectedComponents(node, visited, transpose, component);
-			connectedComponents.push_back(component);
-		}
-	}
-	return connectedComponents;
 }
 
 int main()
 {
-	int V = 9;
+	int V, E;
+	cin >> V >> E;
 
-	vector<vector<int>> adj =
+	vector<Edge*> edges;
+
+	for(int i = 0; i < E; i++)
 	{
-		{ 1, 3 },
-		{ 2, 4 },
-		{ 3, 5 },
-		{ 7 },
-		{ 2 },
-		{ 4, 6 },
-		{ 7, 2 },
-		{ 8 },
-		{ 3 }
-	};
+		int node_a, node_b, weight;
+		cin >> node_a >> node_b >> weight;
 
-	vector<vector<int>> connectedComponents;
-	connectedComponents = Kosaraju(V, adj);
-
-	cout << "Graph contains " << connectedComponents.size() << " strongly connected components." << endl;
-
-	for (auto component : connectedComponents)
-	{
-		cout << "\t";
-
-		for (auto node : component)
-		{
-			cout << node << " ";
-		}
-		cout << endl;
+		edges.push_back(new Edge(node_a, node_b, weight));
 	}
+	Johnson(V, edges);
+
 	return 0;
 }

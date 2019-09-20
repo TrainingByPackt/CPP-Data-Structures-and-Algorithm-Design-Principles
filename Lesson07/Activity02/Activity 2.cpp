@@ -16,6 +16,7 @@ struct Edge
 };
 
 const int UNKNOWN = INT_MAX;
+vector<Edge*> edges;
 
 int BellmanFord(int N, vector<Edge*> edges)
 {
@@ -85,7 +86,7 @@ int main()
     int result = BellmanFord(N * N, edges);
     
     (result == UNKNOWN) ? cout << "TRAVERSAL ABORTED" << endl
-                        : cout << result << endl;
+                        : cout << -1 * result << endl;
     
     return 0;
 }

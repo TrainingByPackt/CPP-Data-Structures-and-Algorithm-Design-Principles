@@ -95,6 +95,8 @@ vector<string> types =
     "TABULATION"
 };
 
+const int UNKNOWN = INT_MAX;
+
 void GetTime(clock_t &timer, string type)
 {
 	// Subtract timer from current time to get time elapsed

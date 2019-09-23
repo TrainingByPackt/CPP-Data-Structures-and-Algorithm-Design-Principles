@@ -1,4 +1,4 @@
-// Chapter 7 : Activity 1
+// Chapter 7 : Activity 3 (Maze Teleportation Game)
 
 #include <iostream>
 #include <vector>
@@ -9,22 +9,14 @@ using namespace std;
 
 struct Edge
 {
-	int start;  // The starting vertex
-	int end;    // The destination vertex
-	int weight; // The edge weight
+	int start;
+	int end;
+	int weight;
 
-	// Constructor
 	Edge(int s, int e, int w) : start(s), end(e), weight(w) {}
 };
 
-
-// Constant assigned the highest 32-bit integer value, used to designate
-// untraversed vertices
-
 const int UNKNOWN = INT_MAX;
-
-vector<Edge*> edges; // Collection of pointers to edge objects
-int V; 				 // Total number of vertices in graph
 
 void FillStack(int node, vector<vector<int>> &adj, vector<bool> &visited, vector<int> &stack)
 {
@@ -80,6 +72,10 @@ vector<vector<int>> GetTranspose(int V, vector<vector<int>> adj)
 
 vector<vector<int>> Kosaraju(int V, vector<vector<int>> adj)
 {
+    isStuck.resize(V, true);
+    inComponent.resize(V, UNKNOWN);
+    componentIndex = 0;
+    
 	vector<bool> visited(V, false);
 	vector<int> stack;
 
@@ -137,25 +133,28 @@ bool HasNegativeCycle(vector<int> distance, vector<Edge*> edges)
 
 int BellmanFord(int V, int start, vector<Edge*> edges)
 {
-	vector<int> score(V, UNKNOWN);
+    // Standard Bellman-Ford implementation
+    
+	vector<int> distance(V, UNKNOWN);
 
-	score[start] = 0;
+	distance[start] = 0;
 
-	for(int i = 1; i < V; i++)
+	for(int i = 0; i < V - 1; i++)
 	{
 		for(auto edge : edges)
 		{
-			int start = edge->start;
-			int end = edge->end;
-			int weight = edge->weight;
-
-			if(score[start] != UNKNOWN && score[start] + weight < score[end])
+			if(distance[edge->start] == UNKNOWN)
+            {
+                continue;
+            }
+            
+			if(distance[edge->start] + edge->weight < distance[edge->end])
 			{
-				score[end] = score[start] + weight;
+				distance[edge->end] = distance[edge->start] + edge->weight;
 			}
 		}
 	}
-	if(HasNegativeCycle(score, edges))
+	if(HasNegativeCycle(distance, edges))
 	{
 		return UNKNOWN;
 	}
@@ -166,7 +165,7 @@ int BellmanFord(int V, int start, vector<Edge*> edges)
 	{
 		if(i == start) continue;
 
-		result = min(result, score[i]);
+		result = min(result, distance[i]);
 	}
 	return result;
 }
@@ -179,8 +178,6 @@ int main()
 
 	vector<Edge*> edges;
 	vector<vector<int>> adj(V + 1);
-	isStuck.resize(V, true);
-	inComponent.resize(V, -1);
 
 	for(int i = 0; i < E; i++)
 	{

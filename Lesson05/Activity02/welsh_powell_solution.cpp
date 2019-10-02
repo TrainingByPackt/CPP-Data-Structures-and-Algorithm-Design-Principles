@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <iostream>
 
+template <typename T> class Graph;
+
 template<typename T>
 struct Edge
 {
@@ -25,6 +27,24 @@ struct Edge
 		return this->weight > e.weight;
 	}
 };
+
+
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const Graph<T>& G)
+{
+	for (auto i = 1; i < G.vertices(); i++)
+	{
+		os << i << ":\t";
+
+		auto edges = G.outgoing_edges(i);
+		for (auto& e : edges)
+			os << "{" << e.dest << ": " << e.weight << "}, ";
+
+		os << std::endl;
+	}
+
+	return os;
+}
 
 template<typename T>
 class Graph
@@ -46,7 +66,7 @@ public:
 		return edge_list;
 	}
 
-	void add_edge(Edge<T>& e)
+	void add_edge(Edge<T>&& e)
 	{
 		// Check if the source and destination vertices are within range
 		if (e.src >= 1 && e.src <= V &&
@@ -70,30 +90,14 @@ public:
 
 	// Overloads the << operator so a graph be written directly to a stream
 	// Can be used as std::cout << obj << std::endl;
-	template <typename T>
-	friend std::ostream& operator<<(std::ostream& os, const Graph<T>& G);
+	// template <typename T>
+	friend std::ostream& operator<< <>(std::ostream& os, const Graph<T>& G);
 
 private:
 	size_t V;		// Stores number of vertices in graph
 	std::vector<Edge<T>> edge_list;
 };
 
-template <typename T>
-std::ostream& operator<<(std::ostream& os, const Graph<T>& G)
-{
-	for (auto i = 1; i < G.vertices(); i++)
-	{
-		os << i << ":\t";
-
-		auto edges = G.outgoing_edges(i);
-		for (auto& e : edges)
-			os << "{" << e.dest << ": " << e.weight << "}, ";
-
-		os << std::endl;
-	}
-
-	return os;
-}
 
 
 // Initialize the colors that will be used to color the vertices
@@ -196,4 +200,5 @@ int main()
 	auto colors = welsh_powell_coloring<T>(G);
 	std::cout << "Vertex Colors: " << std::endl;
 	print_colors(colors);
+	return 0;
 }

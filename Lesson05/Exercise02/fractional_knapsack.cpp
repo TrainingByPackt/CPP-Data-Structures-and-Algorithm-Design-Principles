@@ -109,7 +109,7 @@ void test_fractional_knapsack(unsigned num_objects, unsigned knapsack_capacity)
 		auto weight = uniform_dist(rand);
 		auto value = uniform_dist(rand);
 		auto obj = Object<weight_type, value_type, fractional_type> { 
-			weight, 
+			static_cast<weight_type>(weight), 
 			static_cast<value_type>(value), 
 			static_cast<fractional_type>(value) / weight 
 		};

@@ -4,6 +4,8 @@
 #include<queue>
 #include<map>
 
+template <typename T> class Graph;
+
 template<typename T>
 class SimpleDisjointSet
 {
@@ -105,6 +107,23 @@ struct Edge
 	}
 };
 
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const Graph<T>& G)
+{
+	for (auto i = 1; i < G.vertices(); i++)
+	{
+		os << i <<":\t";
+
+		auto edges = G.edges(i);
+		for (auto& e : edges)
+			os << "{" << e.dest << ": " << e.weight << "}, ";
+		
+		os << std::endl;
+	}
+	
+	return os;
+}
+
 template<typename T>
 class Graph
 {
@@ -125,7 +144,7 @@ public:
 		return edge_list;
 	}
 
-	void add_edge(Edge<T>& e)
+	void add_edge(Edge<T>&& e)
 	{
 		// Check if the source and destination vertices are within range
 		if (e.src >= 1 && e.src <= V && 
@@ -149,30 +168,15 @@ public:
 
 	// Overloads the << operator so a graph be written directly to a stream
 	// Can be used as std::cout << obj << std::endl;
-	template <typename T>
-	friend std::ostream& operator<<(std::ostream& os, const Graph<T>& G);
+	// template <typename T>
+	friend std::ostream& operator<< <>(std::ostream& os, const Graph<T>& G);
 
 private: 
 	size_t V;		// Stores number of vertices in graph
 	std::vector<Edge<T>> edge_list;
 };
 
-template <typename T>
-std::ostream& operator<<(std::ostream& os, const Graph<T>& G)
-{
-	for (auto i = 1; i < G.vertices(); i++)
-	{
-		os << i <<":\t";
 
-		auto edges = G.edges(i);
-		for (auto& e : edges)
-			os << "{" << e.dest << ": " << e.weight << "}, ";
-		
-		os << std::endl;
-	}
-	
-	return os;
-}
 
 
 // Since a tree is also a graph, we can reuse the Graph class
@@ -208,7 +212,7 @@ Graph<T> minimum_spanning_tree(const Graph<T>& G)
 		// in the MST
 		if (dset.find(e.src) != dset.find(e.dest))
 		{
-			MST.add_edge(e);
+			MST.add_edge(Edge <T>{e.src, e.dest, e.weight});
 			dset.union_sets(e.src, e.dest);
 		}
 	}

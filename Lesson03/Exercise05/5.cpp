@@ -17,12 +17,13 @@ class bloom_filter
         case 2:
             return (key / 11) % nBits;
         }
+        return 0;
     }
 
 public:
     bloom_filter(int n) : nBits(n)
     {
-        data = std::vector(nBits, false);
+        data = std::vector<bool>(nBits, false);
     }
 
     void lookup(int key)

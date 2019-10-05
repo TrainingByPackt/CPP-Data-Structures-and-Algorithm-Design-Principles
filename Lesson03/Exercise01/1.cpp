@@ -9,7 +9,7 @@ class hash_map
 public:
     hash_map(size_t n)
     {
-        data = std::vector(n, -1);
+        data = std::vector<int>(n, -1);
     }
 
     void insert(uint value)

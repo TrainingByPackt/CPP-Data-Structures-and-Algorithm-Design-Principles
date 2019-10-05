@@ -20,8 +20,8 @@ class hash_map
 public:
     hash_map(int n) : size(n)
     {
-        data1 = std::vector(size, -1);
-        data2 = std::vector(size, -1);
+        data1 = std::vector<int>(size, -1);
+        data2 = std::vector<int>(size, -1);
     }
 
     std::vector<int>::iterator lookup(int key)

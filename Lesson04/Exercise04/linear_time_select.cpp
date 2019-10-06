@@ -1,7 +1,12 @@
 // Chapter4.cpp : Defines the entry point for the application.
 //
 
-# include "Chapter4.h"
+#include <iostream>
+#include <vector>
+#include <chrono>
+#include <random>
+#include <algorithm>
+#include <numeric>
 
 template <typename T>
 std::vector<T> merge(std::vector<T>& arr1, std::vector<T>& arr2)
@@ -165,10 +170,10 @@ typename std::vector<T>::iterator linear_time_select(typename std::vector<T>::it
 			M.push_back(*find_median<T>(b, l));
 		}
 
-		// Recursively find the median of M, this is the ‘q’ in our explanation
+		// Recursively find the median of M, this is the ï¿½qï¿½ in our explanation
 		auto median_of_medians = (M.size() == 1) ? M.begin() : linear_time_select<T>(M.begin(), M.end() - 1, M.size() / 2);
 
-		// Apply the partition operation and find correct position ‘k’ of pivot ‘q’
+		// Apply the partition operation and find correct position ï¿½kï¿½ of pivot ï¿½qï¿½
 		auto partition_iter = partition_using_given_pivot<T>(begin,
 			last,
 			median_of_medians);

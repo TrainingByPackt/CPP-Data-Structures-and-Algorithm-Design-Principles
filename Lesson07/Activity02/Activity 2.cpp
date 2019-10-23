@@ -46,15 +46,15 @@ struct Graph
 	int maxWeight = -1e9;
 	
 	vector<Edge> edges;
-    vector<vector<int>> adj;
-    vector<vector<int>> weight;
+    	vector<vector<int>> adj;
+    	vector<vector<int>> weight;
 
 	Graph(int v, int e) : V(v), E(e)
 	{
 		vector<vector<bool>> used(V, vector<bool>(V, false));
         
-        adj.resize(V);
-        weight.resize(V, vector<int>(V, UNKNOWN));
+        	adj.resize(V);
+        	weight.resize(V, vector<int>(V, UNKNOWN));
         
 		while (e)
 		{
@@ -76,8 +76,8 @@ struct Graph
 			
 			// Add to edges and mark as used
 			edges.push_back(Edge(u, v, w));
-            adj[u].push_back(v);
-            weight[u][v] = w;
+            		adj[u].push_back(v);
+            		weight[u][v] = w;
 			maxWeight = max(maxWeight, w);
             
 			used[u][u] = used[v][v] = used[u][v] = used[v][u] = true;
@@ -85,7 +85,7 @@ struct Graph
 		}
 		for (int i = 0; i < V; i++)
 		{
-            // Set V to -1 to indicate the graph is invalid
+            		// Set V to -1 to indicate the graph is invalid
 			if (!used[i][i])
 			{
 				V = -1;
@@ -192,14 +192,14 @@ RESULT TestGraph(Graph G)
 
 	for (auto edge : G.edges)
 	{
-        G.weight[edge.u][edge.v] += (distance[edge.u] - distance[edge.v]);
+        	G.weight[edge.u][edge.v] += (distance[edge.u] - distance[edge.v]);
 	}
 
 	double result = 0;
 
 	for (int i = 0; i < G.V; i++)
 	{
-        vector<int> shortest = Dijkstra(i, G);
+        	vector<int> shortest = Dijkstra(i, G);
 
 		double average = 0;
 		int count = 0;

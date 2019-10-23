@@ -72,9 +72,9 @@ vector<vector<int>> GetTranspose(int V, vector<vector<int>> adj)
 
 vector<vector<int>> Kosaraju(int V, vector<vector<int>> adj)
 {
-    isStuck.resize(V, true);
-    inComponent.resize(V, UNKNOWN);
-    componentIndex = 0;
+	isStuck.resize(V, true);
+	inComponent.resize(V, UNKNOWN);
+	componentIndex = 0;
     
 	vector<bool> visited(V, false);
 	vector<int> stack;
@@ -133,8 +133,8 @@ bool HasNegativeCycle(vector<int> distance, vector<Edge*> edges)
 
 int BellmanFord(int V, int start, vector<Edge*> edges)
 {
-    // Standard Bellman-Ford implementation
-    
+	// Standard Bellman-Ford implementation
+	
 	vector<int> distance(V, UNKNOWN);
 
 	distance[start] = 0;
@@ -144,9 +144,9 @@ int BellmanFord(int V, int start, vector<Edge*> edges)
 		for(auto edge : edges)
 		{
 			if(distance[edge->start] == UNKNOWN)
-            {
-                continue;
-            }
+			{
+				continue;
+		    	}
             
 			if(distance[edge->start] + edge->weight < distance[edge->end])
 			{
@@ -211,7 +211,7 @@ int main()
 		cout << i << ": ";
 
 		(results[i] == UNKNOWN) ? cout << "DEAD END" << endl
-								: cout << results[i] << endl;
+					: cout << results[i] << endl;
 	}
 	auto components = Kosaraju(V, adj);	
 

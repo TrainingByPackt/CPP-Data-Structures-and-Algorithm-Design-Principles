@@ -4,11 +4,11 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/TrainingByPackt/CPP-Data-Structures-and-Algorithms/pulls)
 
 # CPP-Data-Structures-and-Algorithms
-C++ is a mature multi-paradigm programming language that enables you to write high-level code with great control over the hardware. Significant pieces of our software infrastructure today, including databases, browsers, frameworks, and GUI toolkits tend to be written in C++.
+C++ is a mature multi-paradigm programming language that enables you to write high-level code with a high degree of control over the hardware. Today, significant parts of software infrastructure, including databases, browsers, multimedia frameworks, and GUI toolkits, are written in C++.
 
-The course is structured in three parts: the first part covers data structures in detail, the second part explains basic algorithm design techniques, and the third part covers advanced techniques. You'll begin with an introduction to C++ data structures and see how to store data using linked lists, arrays, stacks, and queues. The second part of the course explains the greedy algorithms and the divide and conquer algorithms that facilitate faster computations in your programs. The third part of the course shows how by using graph algorithms and dynamic programming, you can develop applications that can perform high calculations.  
+This course starts by introducing C++ data structures and how to store data using linked lists, arrays, stacks, and queues. In later chapters, the course explains the basic algorithm design paradigms, such as the greedy approach and the divide-and-conquer approach, which are used to solve a large variety of computational problems. Finally, you will learn the advanced technique of dynamic programming to develop optimized implementations of several algorithms discussed in the course.
 
-With this course, you’ll learn how to implement standard data structures and algorithms in idiomatic C++ 14/17 code that is efficient and also scales well.
+By the end of this course, you will have learned how to implement standard data structures and algorithms in efficient and scalable C++ 14 code.
 
 ## What you will learn
 * Build applications using hashtables, dictionaries, and sets
@@ -20,14 +20,14 @@ With this course, you’ll learn how to implement standard data structures and a
 
 ## Hardware Requirements
 For an optimal learning experience, we recommend the following hardware configuration:
-* Processor: Intel Core i5 or equivalent
-* Memory: 4GB RAM (8 GB Preferred)
-* Storage: 35 GB available space
+* Any entry-level PC/Mac with Windows, Linux, or macOS is sufficient
+* Processor: Intel Core 2 Duo, Athlon X2, or better
+* Memory: 4 GB RAM
+* Storage: 10 GB available space
 
 ## Software Requirements
 You'll also need the following software installed in advance:
-* OS: Windows 7 SP1 64-bit, Windows 8.1 64-bit or Windows 10 64-bit, Ubuntu Linux, or the latest version of OS X
-* Browser: Google Chrome/Mozilla Firefox Latest Version
-* Notepad++/Sublime Text as IDE (Optional, as you can practice everything using Jupyter note on your browser)
-* Python 3.4+ (latest is Python 3.7) installed (from https://python.org)
-* Python libraries as needed (Jupyter, NumPy, Pandas, Matplotlib, BeautifulSoup4, and so)
+*	Operating system: Windows 7 SP1 32/64-bit, Windows 8.1 32/64-bit, or Windows 10 32/64-bit, Ubuntu 14.04 or later, or macOS Sierra or later
+*	Browser: Google Chrome or Mozilla Firefox
+*	Any modern compiler and IDE (optional) that supports the C++ 14 standard.
+* Boost C++ Libraries

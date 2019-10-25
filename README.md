@@ -18,12 +18,7 @@ By the end of this course, you will have learned how to implement standard data 
 * Explore how modern hardware affects the actual run-time performance of programs
 * Use appropriate modern C++ idioms like std:: array instead of C-style arrays
 
-## Hardware Requirements
-For an optimal learning experience, we recommend the following hardware configuration:
-* Any entry-level PC/Mac with Windows, Linux, or macOS is sufficient
-* Processor: Intel Core 2 Duo, Athlon X2, or better
-* Memory: 4 GB RAM
-* Storage: 10 GB available space
+## The examples of this title has been implemented in the Windows/MAC/Linux operating system.
 
 ## Software Requirements
 You'll also need the following software installed in advance:

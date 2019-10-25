@@ -23,6 +23,6 @@ int main()
     advance(it1, 5); // This takes linear time
     std::cout << "Winner before 5 years was : " << *it << std::endl;
 
-    // Going back will compile time error as forward_list only allows us to move towards end.
+    // Going back will result in compile time error as forward_list only allows us to move towards the end.
     // it1 += 2;  // Compiler error
 }

@@ -18,7 +18,7 @@ By the end of this course, you will have learned how to implement standard data 
 * Explore how modern hardware affects the actual run-time performance of programs
 * Use appropriate modern C++ idioms like std:: array instead of C-style arrays
 
-## The examples of this title has been implemented in the Windows/MAC/Linux operating system.
+# The examples of this title has been implemented in the Windows/MAC/Linux operating system.
 
 ## Software Requirements
 You'll also need the following software installed in advance:

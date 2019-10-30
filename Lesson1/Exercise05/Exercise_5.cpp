@@ -137,18 +137,20 @@ int main()
     sll.push_front(0);
 
     std::cout << "First list: ";
-    for (auto i : sll)
+    for(auto i: sll)
         std::cout << i << " ";
     std::cout << std::endl;
 
     auto sll2 = sll;
-    std::cout << "Second list after copying from first list: ";
-    for (auto i : sll2)
-        std::cout << i << " "; // Prints 0 1 2 3
+    sll2.push_front(-1);
+    std::cout << "Second list after copying from first list and inserting -1 in front: ";
+    for(auto i: sll2)
+        std::cout << i << ' '; // Prints -1 0 1 2 3
     std::cout << std::endl;
 
     std::cout << "First list after copying - deep copy: ";
-    for (auto i : sll)
-        std::cout << i << " "; // Prints 0 1 2 3
+    
+    for(auto i: sll)
+        std::cout << i << ' '; // Prints 0 1 2 3
     std::cout << std::endl;
 }

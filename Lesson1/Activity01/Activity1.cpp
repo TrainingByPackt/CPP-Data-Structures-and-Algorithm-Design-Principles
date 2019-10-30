@@ -17,7 +17,7 @@ struct cir_list
 {
 public:
     using node = cir_list_node<T>;
-    using node_ptr = node *;
+    using node_ptr = node*;
 
 private:
     node_ptr head;

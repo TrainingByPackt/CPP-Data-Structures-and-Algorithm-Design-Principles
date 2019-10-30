@@ -26,9 +26,9 @@ struct card
         {
             switch (number)
             {
-			case 1:
-				os << "Ace";
-				break;
+	    case 1:
+		os << "Ace";
+		break;
             case 11:
                 os << "Jack";
                 break;

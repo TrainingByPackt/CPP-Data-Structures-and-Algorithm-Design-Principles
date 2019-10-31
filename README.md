@@ -1,7 +1,7 @@
-[![GitHub issues](https://img.shields.io/github/issues/TrainingByPackt/CPP-Data-Structures-and-Algorithms.svg)](https://github.com/TrainingByPackt/CPP-Data-Structures-and-Algorithms/issues)
-[![GitHub forks](https://img.shields.io/github/forks/TrainingByPackt/CPP-Data-Structures-and-Algorithms.svg)](https://github.com/TrainingByPackt/CPP-Data-Structures-and-Algorithms/network)
-[![GitHub stars](https://img.shields.io/github/stars/TrainingByPackt/CPP-Data-Structures-and-Algorithms.svg)](https://github.com/TrainingByPackt/CPP-Data-Structures-and-Algorithms/stargazers)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/TrainingByPackt/CPP-Data-Structures-and-Algorithms/pulls)
+[![GitHub issues](https://img.shields.io/github/issues/TrainingByPackt/CPP-Data-Structures-and-Algorithms.svg)](https://github.com/TrainingByPackt/CPP-Data-Structures-and-Algorithm-Design-Principles/issues)
+[![GitHub forks](https://img.shields.io/github/forks/TrainingByPackt/CPP-Data-Structures-and-Algorithms.svg)](https://github.com/TrainingByPackt/CPP-Data-Structures-and-Algorithm-Design-Principles/network)
+[![GitHub stars](https://img.shields.io/github/stars/TrainingByPackt/CPP-Data-Structures-and-Algorithms.svg)](https://github.com/TrainingByPackt/CPP-Data-Structures-and-Algorithm-Design-Principles/stargazers)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/TrainingByPackt/CPP-Data-Structures-and-Algorithm-Design-Principles/pulls)
 
 # C++ Data Structures and Algorithm Design Principles
 C++ is a mature multi-paradigm programming language that enables you to write high-level code with a high degree of control over the hardware. Today, significant parts of software infrastructure, including databases, browsers, multimedia frameworks, and GUI toolkits, are written in C++.

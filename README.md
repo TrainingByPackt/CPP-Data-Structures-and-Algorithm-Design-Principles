@@ -3,7 +3,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/TrainingByPackt/CPP-Data-Structures-and-Algorithms.svg)](https://github.com/TrainingByPackt/CPP-Data-Structures-and-Algorithms/stargazers)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/TrainingByPackt/CPP-Data-Structures-and-Algorithms/pulls)
 
-# C++ Data Structures and Algorithms
+# C++ Data Structures and Algorithm Design Principles
 C++ is a mature multi-paradigm programming language that enables you to write high-level code with a high degree of control over the hardware. Today, significant parts of software infrastructure, including databases, browsers, multimedia frameworks, and GUI toolkits, are written in C++.
 
 This course starts by introducing C++ data structures and how to store data using linked lists, arrays, stacks, and queues. In later chapters, the course explains the basic algorithm design paradigms, such as the greedy approach and the divide-and-conquer approach, which are used to solve a large variety of computational problems. Finally, you will learn the advanced technique of dynamic programming to develop optimized implementations of several algorithms discussed in the course.

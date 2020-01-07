@@ -11,18 +11,19 @@ This course starts by introducing C++ data structures and how to store data usin
 By the end of this course, you will have learned how to implement standard data structures and algorithms in efficient and scalable C++ 14 code.
 
 ### What you will learn
-* Build applications using hashtables, dictionaries, and sets
-* Implement a URL shortening service using a bloom filter
-* Implement common algorithms, such as heap sort and merge sort in string data types
-* Use C++ template metaprogramming to write code libraries
-* Explore how modern hardware affects the actual run-time performance of programs
-* Use appropriate modern C++ idioms like std:: array instead of C-style arrays
+* Build applications using hash tables, dictionaries, and sets.
+* Implement a URL shortening service using a bloom filter.
+* Implement common algorithms, such as heap sort and merge sort in string data types.
+* Use C++ template metaprogramming to write code libraries.
+* Explore how modern hardware affects the actual run-time performance of programs.
+* Use appropriate modern C++ idioms like std:: array instead of C-style arrays.
 
-### The examples of this title has been implemented in the Windows/MAC/Linux operating system.
+### The examples of this title have been tested on the Windows, Linux and MacOS operating systems.
 
 ### Software Requirements
 You'll also need the following software installed in advance:
 *	Operating system: Windows 7 SP1 32/64-bit, Windows 8.1 32/64-bit, or Windows 10 32/64-bit, Ubuntu 14.04 or later, or macOS Sierra or later
 *	Browser: Google Chrome or Mozilla Firefox
 *	Any modern compiler and IDE (optional) that supports the C++ 14 standard.
-* Boost C++ Libraries
+*	Boost C++ Libraries
+*	CMake
